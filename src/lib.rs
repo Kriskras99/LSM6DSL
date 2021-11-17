@@ -129,6 +129,12 @@ where
         self.read_register_i16(Register::OUT_TEMP_L, Register::OUT_TEMP_H)
     }
 
+    /// temperature, gyroscope, accelerometer data available
+    pub fn data_ready(&mut self) -> Result<(bool, bool, bool), E> {
+        read_register(Register::STATUS_REG).map(
+            |status| ((status & 0b100) == 1, (status & 0b10) == 1, (status & 0b1) == 1))
+    }
+
     /// Write to the given register
     fn write_register(&mut self, register: Register, value: u8) -> Result<(), E> {
         self.i2c.write(ADDRESS, &[register.addr(), value])?;
