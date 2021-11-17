@@ -131,7 +131,7 @@ where
 
     /// temperature, gyroscope, accelerometer data available
     pub fn data_ready(&mut self) -> Result<(bool, bool, bool), E> {
-        read_register(Register::STATUS_REG).map(
+        self.read_register(Register::STATUS_REG).map(
             |status| ((status & 0b100) == 1, (status & 0b10) == 1, (status & 0b1) == 1))
     }
 
